@@ -1,3 +1,63 @@
-version https://git-lfs.github.com/spec/v1
-oid sha256:f40178bbcbe7be2caf4014f05ebbeacdf7f8b38f55d729999fe4e3429c80dd6e
-size 2172
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Medical Diagnosis Upload</title>
+</head>
+<body>
+    <h1>Upload Lab Report PDF</h1>
+    <form id="upload-form" enctype="multipart/form-data">
+        <input type="file" id="file-input" name="file" accept="application/pdf" required />
+        <button type="submit">Upload & Predict</button>
+    </form>
+
+    <div id="results" style="margin-top:20px;"></div>
+
+    <h2>Charts</h2>
+    <div id="monthly-chart">{{ monthly_chart | safe }}</div>
+    <div id="age-chart">{{ age_chart | safe }}</div>
+    <div id="region-chart">{{ region_chart | safe }}</div>
+
+    <script>
+        const form = document.getElementById('upload-form');
+        const resultsDiv = document.getElementById('results');
+
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            resultsDiv.innerHTML = "Processing...";
+            const fileInput = document.getElementById('file-input');
+            const formData = new FormData();
+            formData.append('file', fileInput.files[0]);
+
+            try {
+                const response = await fetch('/predict', {
+                    method: 'POST',
+                    body: formData
+                });
+                if (!response.ok) throw new Error('Error uploading file');
+
+                const data = await response.json();
+
+                let html = '<h2>Extracted Lab Data:</h2><ul>';
+                for (const [key, value] of Object.entries(data.input_data)) {
+                    html += `<li><b>${key}:</b> ${value}</li>`;
+                }
+                html += '</ul>';
+
+                html += '<h2>Predictions:</h2>';
+                for (const [category, preds] of Object.entries(data.predictions)) {
+                    html += `<h3>${category}</h3><ul>`;
+                    for (const [label, prob] of Object.entries(preds)) {
+                        html += `<li>${label}: ${(prob * 100).toFixed(2)}%</li>`;
+                    }
+                    html += '</ul>';
+                }
+
+                resultsDiv.innerHTML = html;
+            } catch (error) {
+                resultsDiv.innerHTML = `<p style="color:red;">${error.message}</p>`;
+            }
+        });
+    </script>
+</body>
+</html>
