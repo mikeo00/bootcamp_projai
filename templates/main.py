@@ -25,7 +25,7 @@ FIELDS = [
     'TSH', 'FT4', 'Ferritin', 'Vitamin D', 'B12',
 ]
 
-# Utility functions for extraction and scaling (same as your code)...
+# Utility functions for extraction and scaling 
 def extract_numeric_value(text):
     match = re.search(r'[-+]?\d*\.\d+|\d+', text)
     if match:
