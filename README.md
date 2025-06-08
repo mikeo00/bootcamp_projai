@@ -3,7 +3,7 @@ PROJECT FOR ZAKA AI X MICHEL DAHER FOUNDATION BOOTCAMP:BLOOD TEST DIAGNOSIS A DE
 
 
 
-MADE BY:MICHAEL OSTA,CHARBEL SHAKER,HOUSSEIN MOUSAWI
+MADE BY:MICHAEL OSTA,CHARBEL CHAKER,HUSSEIN MOUSAWI
 
 
 the notebook contains the full blocks of the model step by step there is also a py file where all the notebook code is written in it in case the notebook didnt open properly
